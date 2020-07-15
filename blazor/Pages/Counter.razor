@@ -1,0 +1,36 @@
+﻿@page "/counter"
+@using ApiServices.Security
+@using blazor.Models.Security
+@using blazor.Providers
+@using Microsoft.AspNetCore.Components.Authorization
+
+@inject AuthService _authService
+@inject AuthenticationStateProvider _authenticationStateProvider
+@inject NavigationManager _navigationManager
+
+<h1>Counter</h1>
+
+<p>Current count: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+@code {
+    private int currentCount = 0;
+    private string token;
+    private CreateLoginRequest loginRequest = new CreateLoginRequest();
+    [CascadingParameter] private Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await ((BaseApiAuthenticationStateProvider)_authenticationStateProvider).GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (!user.Identity.IsAuthenticated)
+            _navigationManager.NavigateTo("/login");
+    }
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+}

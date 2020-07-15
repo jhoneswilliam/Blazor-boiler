@@ -1,0 +1,63 @@
+﻿@page "/login"
+@using blazor.ApiServices.Security
+@using blazor.Models.Security
+@using blazor.Models.Security.Validators
+
+@inject AuthService  AuthService
+@inject NavigationManager NavigationManager
+
+<h1>Login</h1>
+
+@if (ShowErrors)
+{
+    <div class="alert alert-danger" role="alert">
+        <p>@Error</p>
+    </div>
+}
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Please enter your details</h5>
+        <EditForm Model="loginModel" OnValidSubmit="HandleLogin">
+
+            <FluentValidator></FluentValidator>
+           
+            <div class="form-group">
+                <label for="email">Email address</label>
+                <InputText Id="email" Class="form-control" @bind-Value="loginModel.Email" />
+                <ValidationMessage For="@(() => loginModel.Email)" />
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <InputText Id="password" type="password" Class="form-control" @bind-Value="loginModel.Password" />
+                <ValidationMessage For="@(() => loginModel.Password)" />
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+
+    private CreateLoginRequest loginModel { get; set; } = new CreateLoginRequest();
+    private bool ShowErrors;
+    private string Error = "";
+
+    private async Task HandleLogin()
+    {
+        ShowErrors = false;
+
+        var result = await AuthService.SignInAsync(loginModel);
+
+        if (result.ValidOperation)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+        else
+        {
+            Error = result.Message;
+            ShowErrors = true;
+        }
+    }
+
+}
