@@ -25,6 +25,9 @@
         var authState = await ((BaseApiAuthenticationStateProvider)_authenticationStateProvider).GetAuthenticationStateAsync();
         var user = authState.User;
 
+        foreach (var item in user.Claims)
+            Console.WriteLine(item);
+
         if (!user.Identity.IsAuthenticated)
             _navigationManager.NavigateTo("/login");
     }

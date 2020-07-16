@@ -3,6 +3,7 @@
 @using ApiServices.Security
 @using blazor.Models.Security
 @using blazor.Providers
+@using Policies
 @inject AuthenticationStateProvider _authenticationStateProvider
 @inject NavigationManager _navigationManager
 
@@ -11,6 +12,24 @@
 Welcome to your new app.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
+
+<AuthorizeView Policy="@EnumPermissions.Perm1.ToString()">
+    <Authorized>
+        <p>User Has Permission @EnumPermissions.Perm1.ToString()</p>
+    </Authorized>
+    <NotAuthorized>
+        <p>User NOT Has @EnumPermissions.Perm1.ToString()</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+<AuthorizeView Policy="@EnumPermissions.Perm2.ToString()">
+    <Authorized>
+        <p>User Has Permission @EnumPermissions.Perm2.ToString()</p>
+    </Authorized>
+    <NotAuthorized>
+        <p>User NOT Has Permission @EnumPermissions.Perm2.ToString()</p>
+    </NotAuthorized>
+</AuthorizeView>
 
 @code   {
     protected override async Task OnInitializedAsync()

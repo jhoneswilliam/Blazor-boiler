@@ -59,7 +59,7 @@ namespace blazor.ApiServices.Security
                 Console.WriteLine((BaseApiAuthenticationStateProvider)_authenticationStateProvider);
                 
                await _localStorage.SetItemAsync("authToken", loginResponse.Value.Token);
-               ((BaseApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAuthenticated(loginRequest.Email);
+               ((BaseApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAuthenticated(loginResponse.Value.Token);
                 //_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", loginResult.Token);
 
                 return loginResponse;

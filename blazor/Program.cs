@@ -16,6 +16,8 @@ using FluentValidation;
 using blazor.Models.Security.Validators;
 using blazor.Models.Security;
 using blazor.InternalServices;
+using blazor.Policies;
+
 
 namespace blazor
 {
@@ -47,12 +49,15 @@ namespace blazor
             // --------- auth -----------
             builder.Services.AddScoped<BaseApiAuthenticationStateProvider>();
             builder.Services.AddScoped<AuthenticationStateProvider>(opt => opt.GetRequiredService<BaseApiAuthenticationStateProvider>());
-
+            builder.Services.AddAuthorizationCore(config =>
+            {
+                config.AddPolicy(EnumPermissions.Perm1.ToString(), PoliciesConfig.Perm1()); 
+                config.AddPolicy(EnumPermissions.Perm2.ToString(), PoliciesConfig.Perm2()); 
+            });
 
             // ***************************************** Others *****************************************
             builder.Services.AddOptions();
             builder.Services.AddBlazoredLocalStorage();
-            builder.Services.AddAuthorizationCore();
             builder.Services.AddHttpClient("BaseAPI", client =>
                     client.BaseAddress = new Uri(baseAPI));
             
