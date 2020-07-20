@@ -95,6 +95,13 @@ app {
 
         .sidebar .nav-item:last-of-type {
             padding-bottom: 1rem;
+            border-top-color: white;
+            border-top-width: 1px;
+            border-top-style: solid;
+        }
+
+        .sidebar .nav-item:last-of-type > a {
+            margin-top:4px;
         }
 
         .sidebar .nav-item a {
