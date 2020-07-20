@@ -1,0 +1,16 @@
+﻿.Shared-Input-GenericInput {
+    width: 100%;
+    background-color: white;
+    border-color: rgb(167, 167, 167);
+    border-radius:5px;
+    border-width:1px;
+    font: 16px Arial, Helvetica, sans-serif;
+    height: auto;
+    margin: 0;
+    outline: 0;
+    padding: 15px;
+}
+
+    .Shared-Input-GenericInput:invalid {
+        border-radius: 5px;
+    }

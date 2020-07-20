@@ -13,10 +13,15 @@
 <p>Current count: @currentCount</p>
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<button class="btn btn-primary" @onclick="unauthorized">unauthorized error</button>
+<button class="btn btn-primary" @onclick="OKmethod">OK</button>
+
+ <blazor.Shared.UI.Toasts.GenericToast @ref="_loginToast"></blazor.Shared.UI.Toasts.GenericToast>
 
 @code {
     private int currentCount = 0;
     private string token;
+    private blazor.Shared.UI.Toasts.GenericToast _loginToast;
     private CreateLoginRequest loginRequest = new CreateLoginRequest();
     [CascadingParameter] private Task<AuthenticationState> authenticationStateTask { get; set; }
 
@@ -32,8 +37,28 @@
             _navigationManager.NavigateTo("/login");
     }
 
-    private void IncrementCount()
+    private void OKmethod()
+    {
+        _loginToast.ShowSucessMessage();
+    }
+
+    private async Task IncrementCount()
     {
         currentCount++;
+    }
+
+    private async Task unauthorized()
+    {
+        var result = await _authService.teste();
+        if (result.ValidOperation)
+        {
+            _loginToast.ShowSucessMessage();
+        }
+        else
+        {
+            _loginToast.ShowAlertMessage(result.Message);
+
+        }
+
     }
 }

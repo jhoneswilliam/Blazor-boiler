@@ -1,3 +1,49 @@
-﻿.teste{
-    background-color : black;
+﻿.Page-LoginPage-MainCard {
+    margin: 0 auto;
+    padding: 0 25px;
+    padding-bottom: 20px;
+    min-width: 250px;
+    max-width: 350px;
+    width: 40%;
+    margin-top: 50px;
+}
+
+.Page-LoginPage-LoginConteiner {
+    width: 100%;
+    margin: 0px;
+    display: flex;
+    flex-flow: column;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+   
+}
+
+.Page-LoginPage-LoginItem {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.Page-LoginPage-LoginItem > input, button {
+    width: 100%;
+}
+
+.Page-LoginPage-MicroText {
+    margin-top: 10px;
+    color: lightslategrey;
+    text-align: left;
+    font: 13px Arial, Helvetica, sans-serif;
+    margin-left: 0px;
+    opacity: 0.8;
+}
+
+.Page-LoginPage-MicroText:hover {
+    opacity: 1;
+    cursor: pointer
+}
+
+.Page-LoginPage-Logo {
+    width:150px;
+    min-width:150px;
+    height: 0 auto;
+    margin: 0 auto;
 }

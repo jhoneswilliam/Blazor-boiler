@@ -5,19 +5,12 @@ using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace blazor.ApiServices.Security
 {
-    public class AuthService : BaseAPIService
+    public class AuthService
     {
         private readonly HttpClient _client;
         private readonly AuthenticationStateProvider _authenticationStateProvider;
@@ -51,7 +44,6 @@ namespace blazor.ApiServices.Security
                 var strObj = await responseContent.ReadAsStringAsync();
                
                 var loginResponse = JsonConvert.DeserializeObject<Result<LoginResponse>>(strObj);
-
                 if (!loginResponse.ValidOperation)
                     return loginResponse;
 
@@ -64,14 +56,23 @@ namespace blazor.ApiServices.Security
 
                 return loginResponse;
             }
-            //catch (HttpRequestException httpEx)
-            //{
-                
-            //}
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                var a = ex.Message;
-                return new Result<LoginResponse> { ValidOperation = false, Message = UnknownFailureMessage };
+                return new Result<LoginResponse> { ValidOperation = false, Message = ex.Message };
+            }
+        }
+
+        public async Task<Result> teste()
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync("api/Login");
+
+                return new Result { ValidOperation = true, Message = null};
+            }
+            catch (Exception ex)
+            {
+                return new Result { ValidOperation = false, Message = ex.Message };
             }
         }
     }

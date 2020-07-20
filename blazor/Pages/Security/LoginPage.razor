@@ -1,53 +1,64 @@
 ﻿@page "/login"
 @using blazor.ApiServices.Security
 @using blazor.Models.Security
-@using blazor.Models.Security.Validators
+@using System.Threading;
 
+@inject IModalService Modal
 @inject AuthService  AuthService
 @inject NavigationManager NavigationManager
 
-<h1>Login</h1>
 
-@if (ShowErrors)
-{
-    <div class="alert alert-danger" role="alert">
-        <p>@Error</p>
-    </div>
-}
+    <div class="Page-LoginPage-MainCard Shared-Cards-GeneriCard">
 
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">Please enter your details</h5>
-        <EditForm Model="loginModel" OnValidSubmit="HandleLogin">
-
+        <EditForm class="Page-LoginPage-LoginConteiner" Model="loginModel" OnValidSubmit="HandleLogin">
             <FluentValidator></FluentValidator>
-           
-            <div class="form-group">
-                <label for="email">Email address</label>
-                <InputText Id="email" Class="form-control" @bind-Value="loginModel.Email" />
+
+            <div class="Page-LoginPage-LoginItem">
+                <img src="/images/logos/main-logo.png" class="Page-LoginPage-Logo" />
+            </div>
+            <div class="Page-LoginPage-LoginItem"  style="text-align:left;">
+                <InputText placeholder="Email" autocomplete="off" class="Shared-Input-GenericInput" @bind-Value="loginModel.Email" />
                 <ValidationMessage For="@(() => loginModel.Email)" />
             </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <InputText Id="password" type="password" Class="form-control" @bind-Value="loginModel.Password" />
-                <ValidationMessage For="@(() => loginModel.Password)" />
+            <div class="Page-LoginPage-LoginItem"  style="text-align:left;">
+                <InputText Id="password" placeholder="Password" autocomplete="off" class="Shared-Input-GenericInput" type="password" @bind-Value="loginModel.Password" />
+                <ValidationMessage style="padding-left:0px;" For="@(() => loginModel.Password)" />
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <div class="Page-LoginPage-LoginItem">
+                <button class="Shared-Button-Primary" type="submit" disabled="@_isLoadingState">Sign In</button>
+                <p class="Page-LoginPage-MicroText" @onclick="HandlerForgotPassword">Forgot password?</p>
+
+            </div>
+            <div class="Page-LoginPage-LoginItem">
+                <blazor.Shared.UI.Loaders.GenericLoader @ref="_loginLoader" />
+            </div>
+
         </EditForm>
+     
+        <blazor.Shared.UI.Toasts.GenericToast @ref="_loginToast"></blazor.Shared.UI.Toasts.GenericToast>
+
     </div>
-</div>
 
 @code {
 
     private CreateLoginRequest loginModel { get; set; } = new CreateLoginRequest();
-    private bool ShowErrors;
-    private string Error = "";
+
+    private bool _isLoadingState = false;
+    private blazor.Shared.UI.Loaders.GenericLoader _loginLoader;
+    private blazor.Shared.UI.Toasts.GenericToast _loginToast;
+
+    bool snackBar3IsOpen = false;
 
     private async Task HandleLogin()
     {
-        ShowErrors = false;
+
+        _isLoadingState = true;
+        _loginLoader.Loading(_isLoadingState);
 
         var result = await AuthService.SignInAsync(loginModel);
+
+        _isLoadingState = false;
+        _loginLoader.Loading(_isLoadingState);
 
         if (result.ValidOperation)
         {
@@ -55,9 +66,28 @@
         }
         else
         {
-            Error = result.Message;
-            ShowErrors = true;
+            _loginToast.ShowAlertMessage(result.Message);
+
         }
     }
 
+    private async Task HandlerForgotPassword()
+    {
+        var options = new ModalOptions()
+        {
+            HideCloseButton = true
+        };
+
+        var forgotPasswordPage = Modal.Show<ForgotPasswordPage>("Forgot password", options);
+        var result = await forgotPasswordPage.Result;
+
+        if (result.Cancelled)
+        {
+            Console.WriteLine("Modal was cancelled");
+        }
+        else
+        {
+            Console.WriteLine("Modal was closed");
+        }
+    }
 }

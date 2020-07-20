@@ -1,0 +1,19 @@
+﻿.Shared-Button-Primary {
+    background-color: seagreen;
+    color: white;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    padding: 10px;
+    text-align: center;
+    font: 16px Arial, Helvetica, sans-serif;
+    border: none;
+    opacity: 0.8;
+    transition: 0.3s;
+    display: inline-block;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.Shared-Button-Primary:hover {
+    opacity: 1
+}

@@ -1,0 +1,58 @@
+﻿@using System.Threading;
+
+<div class="snackbar @_stateClass" style="background-color:@_bgColor;">
+    @_message
+    <span @onclick="Dismiss">OK</span>
+</div>
+
+@code{
+
+
+    private string _colorSucess { get; } = "#2e8b57";
+    private string _colorAlert { get; } = "#CC560A";
+    private string _message = "";
+    private string _stateClass = "";
+    private string _bgColor = "";
+    private bool _isActive = false;
+
+    public void ShowAlertMessage(string message)
+    {
+        _bgColor = _colorAlert;
+
+        _stateClass = "";
+        _message = "";
+        this.StateHasChanged();
+
+        _stateClass = "show";
+        _message = message;
+        this.StateHasChanged();
+
+    }
+
+    public void ShowSucessMessage()
+    {
+        ShowSucessMessage("Accomplished!");
+    }
+
+    public void ShowSucessMessage(string message)
+    {
+        _bgColor = _colorSucess;
+
+        _stateClass = "";
+        _message = "";
+        this.StateHasChanged();
+
+        _stateClass = "show";
+        _message = message;
+        this.StateHasChanged();
+
+    }
+
+    private void Dismiss()
+    {
+
+        _stateClass = "";
+        _message = "";
+        this.StateHasChanged();
+    }
+}

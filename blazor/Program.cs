@@ -17,7 +17,8 @@ using blazor.Models.Security.Validators;
 using blazor.Models.Security;
 using blazor.InternalServices;
 using blazor.Policies;
-
+using Blazored.Modal;
+using blazor.ApiServices.PolicyHandlers;
 
 namespace blazor
 {
@@ -26,7 +27,7 @@ namespace blazor
         public static async Task Main(string[] args)
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
-            
+
 
             builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
@@ -39,7 +40,7 @@ namespace blazor
 
             // --------- API Services -----------
             builder.Services.AddTransient<AuthService>();
-            
+
             // --------- Internal Services -----------
             builder.Services.AddTransient<ConfigServices>();
 
@@ -51,16 +52,24 @@ namespace blazor
             builder.Services.AddScoped<AuthenticationStateProvider>(opt => opt.GetRequiredService<BaseApiAuthenticationStateProvider>());
             builder.Services.AddAuthorizationCore(config =>
             {
-                config.AddPolicy(EnumPermissions.Perm1.ToString(), PoliciesConfig.Perm1()); 
-                config.AddPolicy(EnumPermissions.Perm2.ToString(), PoliciesConfig.Perm2()); 
+                config.AddPolicy(EnumPermissions.Perm1.ToString(), PoliciesConfig.Perm1());
+                config.AddPolicy(EnumPermissions.Perm2.ToString(), PoliciesConfig.Perm2());
             });
 
             // ***************************************** Others *****************************************
             builder.Services.AddOptions();
+            builder.Services.AddTransient<BaseAPIServiceHandler>();
             builder.Services.AddBlazoredLocalStorage();
             builder.Services.AddHttpClient("BaseAPI", client =>
-                    client.BaseAddress = new Uri(baseAPI));
-            
+            {
+                client.BaseAddress = new Uri(baseAPI);
+            })
+            .AddHttpMessageHandler<BaseAPIServiceHandler>();
+
+
+
+            builder.Services.AddBlazoredModal();
+
             builder.RootComponents.Add<App>("app");
             await builder.Build().RunAsync();
         }
