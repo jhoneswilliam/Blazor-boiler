@@ -41,7 +41,7 @@ namespace blazor.ApiServices.PolicyHandlers
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", savedToken);
 
             var response = await base.SendAsync(request, cancellationToken);
-
+             
             //200
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
@@ -93,6 +93,7 @@ namespace blazor.ApiServices.PolicyHandlers
 
         private async Task<bool> RefreshToken()
         {
+
             try
             {
                 var httpClient = new HttpClient()
