@@ -26,6 +26,7 @@ namespace blazor.ApiServices.Security
         public async Task SingOutAsync()
         {
             await _localStorage.RemoveItemAsync("authToken");
+            await _localStorage.RemoveItemAsync("authRefreshToken");
             ((BaseApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
             //_httpClient.DefaultRequestHeaders.Authorization = null;
         }
@@ -47,10 +48,9 @@ namespace blazor.ApiServices.Security
                 if (!loginResponse.ValidOperation)
                     return loginResponse;
 
-                Console.WriteLine(loginResponse.Value.Token);
-                Console.WriteLine((BaseApiAuthenticationStateProvider)_authenticationStateProvider);
-                
                await _localStorage.SetItemAsync("authToken", loginResponse.Value.Token);
+               await _localStorage.SetItemAsync("authRefreshToken", loginResponse.Value.RefreshToken);
+
                ((BaseApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAuthenticated(loginResponse.Value.Token);
                 //_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", loginResult.Token);
 

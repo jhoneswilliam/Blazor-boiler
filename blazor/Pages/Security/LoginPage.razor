@@ -41,7 +41,7 @@
 
 @code {
 
-    private CreateLoginRequest loginModel { get; set; } = new CreateLoginRequest();
+    private CreateLoginRequest loginModel { get; set; } = new CreateLoginRequest() { SignInType = Enums.Security.EnumSignInType.SignInSpa};
 
     private bool _isLoadingState = false;
     private blazor.Shared.UI.Loaders.GenericLoader _loginLoader;

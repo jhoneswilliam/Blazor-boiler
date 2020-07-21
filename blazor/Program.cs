@@ -19,6 +19,7 @@ using blazor.InternalServices;
 using blazor.Policies;
 using Blazored.Modal;
 using blazor.ApiServices.PolicyHandlers;
+using blazor.Enums.Security;
 
 namespace blazor
 {
